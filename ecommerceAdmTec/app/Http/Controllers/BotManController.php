@@ -8,13 +8,12 @@ use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 //***
+
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
-use App\Conversations\ExampleConversation; 
-use App\Conversations\UMGpagos; //UMGpagos
-use App\Conversations\UMGfechas; //UMGpagos
-use App\Conversations\UMGgestion;
-use App\Conversations\UMGestudiante;
+use App\Conversations\ExampleConversation;
+use App\Conversations\PaisesCobertura;
+use App\Conversations\ DistribuidorInfo;
 
 class BotManController extends Controller
 {
@@ -24,7 +23,7 @@ class BotManController extends Controller
     public function handle()
     {
         $botman = app('botman');
-            // Simple respond method
+
         $botman->hears('info', function (BotMan $bot) {
             $bot->reply('2019, Copyright © Todos los Derechos Reservados  
                 Development Team:
@@ -34,7 +33,7 @@ class BotManController extends Controller
 
                 San José Pinula, Ingeniería en sistemas');
         });
-      
+
 
         //imagenes
         $botman->hears('imagen', function (BotMan $bot) {
@@ -104,34 +103,13 @@ class BotManController extends Controller
             $bot->typesAndWaits(10);
             $bot->reply("Tell me more!");
         });
-        //ejemplo conversation
-        $botman->hears('chat', function($bot) {
-            $bot->startConversation(new ExampleConversation);
-        });
         
-        //***********información universidad***********
-        //conversacion
-        $botman->hears('Fechas', function($bot) {
-            $bot->startConversation(new UMGfechas);
-        });
-
-        $botman->hears('Pagos', function($bot) {
-            $bot->startConversation(new UMGpagos);
-        });
-
-        $botman->hears('Gestiones', function($bot) {
-            $bot->startConversation(new UMGgestion);
-        });
-
-        $botman->hears('Estudiante', function($bot) {
-            $bot->startConversation(new UMGestudiante);
-        });
 
 
-      
+        
         $botman->fallback(function($bot) {
             $bot->types();
-            $bot->reply('Lo Siento, aún no puedo responder tu consulta. Por favor intenta con... "Fechas" "Pagos" "Gestiones" "Estudiante" "Sede" "Info"');
+            $bot->reply('Lo Siento, aún no puedo responder tu consulta. Por favor intenta con... "/sedes1" "/distribuidor2"  "Sede" "Info"');
         });
 
 
@@ -151,8 +129,21 @@ class BotManController extends Controller
      * Loaded through routes/botman.php
      * @param  BotMan $bot
      */
+    //conversacion
     public function startConversation(BotMan $bot)
     {
         $bot->startConversation(new ExampleConversation());
     }
+    
+    public function startPagos(BotMan $bot)
+    {
+        $bot->typesAndWaits(2);
+        $bot->startConversation(new PaisesCobertura());
+    }
+    public function startDistribuidor(BotMan $bot)
+    {
+        $bot->typesAndWaits(3);
+        $bot->startConversation(new DistribuidorInfo());
+    }
+    //DistribuidorInfo
 }
